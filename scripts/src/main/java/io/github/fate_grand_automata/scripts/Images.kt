@@ -37,6 +37,7 @@ enum class Images {
     FPSummonContinue,
     SkillTen,
     Stun,
+    Immobilized,
     SelectedParty,
     SilverXP,
     GoldXP,
@@ -62,5 +63,6 @@ enum class Images {
     CEMercyLv1,
     CEProsperityLv1,
     CESynchronizationLv1,
-    SkillUse
+    SkillUse,
+    RankUp
 }
