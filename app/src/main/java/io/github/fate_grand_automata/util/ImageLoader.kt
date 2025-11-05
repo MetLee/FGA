@@ -48,75 +48,8 @@ class ImageLoader @Inject constructor(
     private var currentGameServer: GameServer = GameServer.default
     private var regionCachedPatterns = mutableMapOf<CacheKey, Pattern>()
 
-    fun Images.fileName(): String = when (this) {
-        Images.BattleScreen -> "battle.png"
-        Images.ServantExist -> "servant_exist.png"
-        Images.TargetDanger -> "target_danger.png"
-        Images.TargetServant -> "target_servant.png"
-        Images.Buster -> "buster.png"
-        Images.Arts -> "art.png"
-        Images.Quick -> "quick.png"
-        Images.Weak -> "weak.png"
-        Images.Resist -> "resist.png"
-        Images.Friend -> "friend.png"
-        Images.Guest -> "guest.png"
-        Images.Follow -> "follow.png"
-        Images.LimitBroken -> "limitbroken.png"
-        Images.SupportScreen -> "support_screen.png"
-        Images.SupportConfirmSetupButton -> "support_region_tool.png"
-        Images.StorySkip -> "storyskip.png"
-        Images.Menu -> "menu.png"
-        Images.Stamina -> "stamina.png"
-        Images.Result -> "result.png"
-        Images.Bond -> "bond.png"
-        Images.Bond10Reward -> "bond10.png"
-        Images.CEDetails -> "ce_details.png"
-        Images.Repeat -> "confirm.png"
-        Images.QuestReward -> "questreward.png"
-        Images.Retry -> "retry.png"
-        Images.Withdraw -> "withdraw.png"
-        Images.LotteryBoxFinished -> "lottery.png"
-        Images.LotteryLineupUpdated -> "lottery_lineup_updated.png"
-        Images.PresentBoxFull -> "StopGifts.png"
-        Images.MasterExp -> "master_exp.png"
-        Images.MasterLevelUp -> "master_lvl_up.png"
-        Images.MatRewards -> "mat_rewards.png"
-        Images.InventoryFull -> "inven_full.png"
-        Images.FPSummonContinue -> "fp_continue.png"
-        Images.SkillTen -> "skill_ten.png"
-        Images.Stun -> "stun.png"
-        Images.Immobilized -> "immobilized.png"
-        Images.SelectedParty -> "selected_party.png"
-        Images.SilverXP -> "SilverXP.png"
-        Images.GoldXP -> "GoldXP.png"
-        Images.GiftBoxCheck -> "gift_box_check.png"
-        Images.GiftBoxScrollEnd -> "gift_box_scroll_end.png"
-        Images.DropCE -> "drop_ce.png"
-        Images.DropCEStars -> "drop_ce_star.png"
-        Images.FriendSummon -> "friend_summon.png"
-        Images.DropScrollbar -> "drop_scrollbar.png"
-        Images.SupportExtra -> "support_extra.png"
-        Images.SupportNotFound -> "support_not_found.png"
-        Images.Support -> "support.png"
-        Images.ServantCheckSupport -> "servant_check_support.png"
-        Images.BattleMenu -> "battle_menu.png"
-        Images.CEEnhance -> "ce_enhance.png"
-        Images.CEGloomLv1 -> "gloom_0.png"
-        Images.CEStarvationLv1 -> "starvation_0.png"
-        Images.CEAwakeningLv1 -> "awakening_0.png"
-        Images.CEBarrierLv1 -> "barrier_0.png"
-        Images.CECombatLv1 -> "combat_0.png"
-        Images.CEDeceptionLv1 -> "deception_0.png"
-        Images.CELinkageLv1 -> "linkage_0.png"
-        Images.CEMercyLv1 -> "mercy_0.png"
-        Images.CEProsperityLv1 -> "prosperity_0.png"
-        Images.CESynchronizationLv1 -> "synchronization_0.png"
-        Images.SkillUse -> "skill_use.png"
-        Images.RankUp -> "rank_up.png"
-    }
-
     override operator fun get(img: Images, gameServer: GameServer?): Pattern = synchronized(regionCachedPatterns) {
-        val path = img.fileName()
+        val path = img.path
 
         val server = prefs.gameServer
 
@@ -197,6 +130,8 @@ val MaterialEnum.drawable
         MaterialEnum.AmnestyBell -> R.drawable.mat_amnesty_bell
         MaterialEnum.CeremonialBlade -> R.drawable.mat_ceremonial_blade
         MaterialEnum.UnforgettableAshes -> R.drawable.mat_ashes
+        MaterialEnum.ObsidianEdge -> R.drawable.mat_obsidian_edge
+        MaterialEnum.VestigeOfMadness -> R.drawable.mat_vestige
 
         MaterialEnum.Seed -> R.drawable.mat_seed
         MaterialEnum.GhostLantern -> R.drawable.mat_ghost_lantern
@@ -219,6 +154,12 @@ val MaterialEnum.drawable
         MaterialEnum.DivineSpiritParticle -> R.drawable.mat_particle
         MaterialEnum.RainbowThreadBall -> R.drawable.mat_thread
         MaterialEnum.FantasyScales -> R.drawable.mat_fantasy_scales
+        MaterialEnum.Sunscale -> R.drawable.mat_sunscale
+        MaterialEnum.Converger -> R.drawable.mat_converger
+        MaterialEnum.FlowerOfTheEnd -> R.drawable.mat_flower_of_the_end
+        MaterialEnum.UniversalCube -> R.drawable.mat_universal_cube
+        MaterialEnum.DivineLens -> R.drawable.mat_divine_lens
+        MaterialEnum.HolyWaterOfDestiny -> R.drawable.mat_holy_water_of_destiny
 
         MaterialEnum.Claw -> R.drawable.mat_claw
         MaterialEnum.Heart -> R.drawable.mat_heart
@@ -238,10 +179,8 @@ val MaterialEnum.drawable
         MaterialEnum.StarShard -> R.drawable.mat_star_shard
         MaterialEnum.FruitOfEternity -> R.drawable.mat_fruit
         MaterialEnum.DemonFlameLantern -> R.drawable.mat_demon_lantern
-        MaterialEnum.ObsidianEdge -> R.drawable.mat_obsidian_edge
-        MaterialEnum.VestigeOfMadness -> R.drawable.mat_vestige
-        MaterialEnum.Sunscale -> R.drawable.mat_sunscale
-        MaterialEnum.Converger -> R.drawable.mat_converger
+        MaterialEnum.GoldenCauldron -> R.drawable.mat_golden_cauldron
+        MaterialEnum.MoonlightNucleus -> R.drawable.mat_moonlight_nucleus
 
         MaterialEnum.MonumentSaber -> R.drawable.mat_monument_saber
         MaterialEnum.MonumentArcher -> R.drawable.mat_monument_archer

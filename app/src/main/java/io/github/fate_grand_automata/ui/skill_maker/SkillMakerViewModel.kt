@@ -1,6 +1,7 @@
 package io.github.fate_grand_automata.ui.skill_maker
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -38,7 +39,9 @@ class SkillMakerViewModel @Inject constructor(
         if (skillString.isNotEmpty()) {
             m.skillCommand.last().let { l ->
                 if (l is SkillMakerEntry.Action && l.action is AutoSkillAction.Atk) {
-                    m.skillCommand.removeLast()
+                    // openjdk problem with android 15
+                    // https://developer.android.com/about/versions/15/behavior-changes-15#openjdk-api-changes
+                    m.skillCommand.removeAt(m.skillCommand.lastIndex)
                     m.skillCommand.add(SkillMakerEntry.Next.Wave(l.action))
                 }
             }
@@ -47,11 +50,18 @@ class SkillMakerViewModel @Inject constructor(
         m
     }
 
-    private val _stage = mutableStateOf(
+    private val _wave = mutableIntStateOf(
         if (state.skillString != null) {
-            state.stage
+            state.wave
         } else {
             model.skillCommand.count { it is SkillMakerEntry.Next.Wave } + 1
+        }
+    )
+    private val _turn = mutableIntStateOf(
+        if (state.skillString != null){
+            state.turn
+        } else {
+            model.skillCommand.count { it is SkillMakerEntry.Next } + 1
         }
     )
 
@@ -68,7 +78,8 @@ class SkillMakerViewModel @Inject constructor(
         val saveState = SkillMakerSavedState(
             skillString = model.toString(),
             enemyTarget = enemyTarget.value,
-            stage = stage.value,
+            wave = wave.value,
+            turn = turn.value,
             currentSkill = currentSkill,
             currentIndex = currentIndex.value
         )
@@ -97,7 +108,7 @@ class SkillMakerViewModel @Inject constructor(
         ++_currentIndex.value
     }
 
-    private fun undo() {
+    private fun deleteSelected() {
         model.skillCommand.removeAt(currentIndex.value)
         --_currentIndex.value
     }
@@ -144,13 +155,23 @@ class SkillMakerViewModel @Inject constructor(
 
     fun unSelectTargets() = setEnemyTarget(null)
 
-    val stage: State<Int> = _stage
-    private fun prevStage() = --_stage.value
+    val wave: State<Int> = _wave
+    private fun prevStage() = --_wave.value
+
+    val turn: State<Int> = _turn
+
+    private fun prevTurn() = --_turn.value
 
     fun initSkill(skill: Skill) {
         currentSkill = skill.autoSkillCode
 
         navigation.value = SkillMakerNav.SkillTarget(skill)
+    }
+
+    fun noTargetSkill(skill: Skill) {
+        currentSkill = skill.autoSkillCode
+
+        targetSkill(null)
     }
 
     fun back() {
@@ -181,20 +202,23 @@ class SkillMakerViewModel @Inject constructor(
         _currentIndex.value = model.skillCommand.lastIndex
 
         while (last.let { l -> l is SkillMakerEntry.Next && l.action == AutoSkillAction.Atk.noOp() }) {
-            undo()
+            deleteSelected()
         }
 
         return getSkillCmdString()
     }
 
     fun nextTurn(atk: AutoSkillAction.Atk) {
+        ++_turn.value
+
         add(SkillMakerEntry.Next.Turn(atk))
 
         back()
     }
 
-    fun nextStage(atk: AutoSkillAction.Atk) {
-        ++_stage.value
+    fun nextWave(atk: AutoSkillAction.Atk) {
+        ++_wave.value
+        ++_turn.value
 
         // Uncheck selected targets
         unSelectTargets()
@@ -216,7 +240,7 @@ class SkillMakerViewModel @Inject constructor(
                 lastAction.action is AutoSkillAction.MasterSkill &&
                 lastAction.action.skill == Skill.Master.C
             ) {
-                undo()
+                deleteSelected()
             }
         }
 
@@ -257,14 +281,18 @@ class SkillMakerViewModel @Inject constructor(
         _enemyTarget.value = target
     }
 
-    private fun undoStageOrTurn() {
+    private fun deleteStageOrTurn() {
         // Decrement Battle/Turn count
         if (last is SkillMakerEntry.Next.Wave) {
             prevStage()
+            prevTurn()
+        }
+        if (last is SkillMakerEntry.Next.Turn){
+            prevTurn()
         }
 
         // Undo the Battle/Turn change
-        undo()
+        deleteSelected()
 
         revertToPreviousEnemyTarget()
     }
@@ -273,24 +301,24 @@ class SkillMakerViewModel @Inject constructor(
         _currentIndex.value = model.skillCommand.lastIndex
 
         while (!isEmpty()) {
-            onUndo()
+            onDeleteSelected()
         }
     }
 
-    fun onUndo() {
+    fun onDeleteSelected() {
         if (!isEmpty()) {
             // Un-select target
             when (val last = last) {
                 // Battle/Turn change
                 is SkillMakerEntry.Next -> {
-                    undoStageOrTurn()
+                    deleteStageOrTurn()
                 }
 
                 is SkillMakerEntry.Action -> {
                     if (last.action is AutoSkillAction.TargetEnemy) {
-                        undo()
+                        deleteSelected()
                         revertToPreviousEnemyTarget()
-                    } else undo()
+                    } else deleteSelected()
                 }
                 // Do nothing
                 is SkillMakerEntry.Start -> {

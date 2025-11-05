@@ -49,6 +49,22 @@ interface ImageMatcher {
     ): Sequence<Match>
 
     fun isWhite(region: Region): Boolean
+    fun isBlack(region: Region): Boolean
+
+    /**
+     * Checks if all images in the map exist in their respective regions.
+     *
+     * @param items a [Map] of [Region] and [Pattern] pairs
+     * @param timeout how long to search for before giving up
+     * @param similarity the minimum similarity for this search
+     * @param requireAll if `true`, all images must exist in their respective regions
+     */
+    fun exists(
+        items: Map<Pattern, Region>,
+        timeout: Duration = Duration.ZERO,
+        similarity: Double? = null,
+        requireAll: Boolean
+    ): Boolean
 }
 
 class RealImageMatcher @Inject constructor(
@@ -83,6 +99,8 @@ class RealImageMatcher @Inject constructor(
         condition: () -> Boolean,
         timeout: Duration = Duration.ZERO
     ): Boolean {
+        //TODO throw exception if useSameSnapIn is active and timeout > 0
+
         val endTimeMark = TimeSource.Monotonic.markNow() + timeout
 
         while (true) {
@@ -126,8 +144,8 @@ class RealImageMatcher @Inject constructor(
         )
     }
 
-    override fun findAll(region: Region, pattern: Pattern, similarity: Double?) =
-        screenshotManager.getScreenshot()
+    override fun findAll(region: Region, pattern: Pattern, similarity: Double?): Sequence<Match> {
+        val matches = screenshotManager.getScreenshot()
             .crop(transform.toImage(region))
             .findMatches(
                 pattern,
@@ -141,12 +159,15 @@ class RealImageMatcher @Inject constructor(
 
                 Match(matchedRegion, it.score)
             }
-            .also {
-                highlight(
-                    region,
-                    color = if (it.any()) HighlightColor.Success else HighlightColor.Error
-                )
-            }
+            .toList() // Convert to list to avoid sequence consumption issues
+        
+        highlight(
+            region,
+            color = if (matches.isNotEmpty()) HighlightColor.Success else HighlightColor.Error
+        )
+        
+        return matches.asSequence()
+    }
 
     override fun isWhite(region: Region) =
         screenshotManager.getScreenshot()
@@ -158,4 +179,49 @@ class RealImageMatcher @Inject constructor(
                     color = if (it) HighlightColor.Success else HighlightColor.Error
                 )
             }
+
+    override fun isBlack(region: Region) =
+        screenshotManager.getScreenshot()
+            .crop(transform.toImage(region))
+            .isBlack()
+            .also {
+                highlight(
+                    region,
+                    color = if (it) HighlightColor.Success else HighlightColor.Error
+                )
+            }
+
+    override fun exists(
+        items: Map<Pattern, Region>,
+        timeout: Duration,
+        similarity: Double?,
+        requireAll: Boolean
+    ): Boolean {
+        exitManager.checkExitRequested()
+        val imageCheck = {
+            if (requireAll) {
+                items.all { (image, region) ->
+                    region.existsNow(image, similarity)
+                }
+            } else {
+                items.any { (image, region) ->
+                    region.existsNow(image, similarity)
+                }
+            }
+        }
+        return checkConditionLoop(
+            {
+                // debug rectangles will cause errors so activate useSameSnapIn if it's not already active
+                if (!screenshotManager.usePreviousSnap) {
+                    screenshotManager.useSameSnapIn {
+                        imageCheck()
+                    }
+                }
+                else {
+                    imageCheck()
+                }
+            },
+            timeout
+        )
+    }
 }

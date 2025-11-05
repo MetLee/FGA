@@ -35,10 +35,8 @@
     <string name="skill_maker_atk_next_turn">"次のターン
 同じウェーブ"</string>
     <string name="skill_maker_main_enemy">"敵 %d"</string>
-    <string name="skill_maker_main_battle">"Battle: %d"</string>
     <string name="skill_maker_main_master_skills">"マスター
 スキル"</string>
-    <string name="skill_maker_main_undo">"削除"</string>
     <string name="skill_maker_main_clear">"全削除"</string>
     <string name="skill_maker_main_servant">"サーヴァント %d"</string>
     <string name="skill_maker_main_attack">"Attack"</string>
@@ -61,8 +59,10 @@
     <string name="skill_maker_arts">"Arts"</string>
     <string name="skill_maker_buster">"Buster"</string>
     <string name="skill_maker_kukulkan">"ククルカン"</string>
-    <string name="skill_maker_option_1">"スター消費しない"</string>
-    <string name="skill_maker_option_2">"10個消費する"</string>
+    <string name="skill_maker_udk_barghest">"ＵＤＫ－バーゲスト"</string>
+    <string name="skill_maker_option_1">"第一選択"</string>
+    <string name="skill_maker_option_2">"2番目の選択肢"</string>
+    <string name="skill_maker_option_3">"3番目の選択肢"</string>
     <string name="card_priority_wave_number">"ウェーブ %d"</string>
     <string name="card_priority_high">"高い"</string>
     <string name="card_priority_low">"低い"</string>
@@ -96,12 +96,17 @@
     <string name="p_battle_config_party">"パーティー"</string>
     <string name="p_battle_config_server">"ゲームサーバー"</string>
     <string name="p_battle_config_card_priority">"カードの優先順位"</string>
-    <string name="p_battle_config_servant_priority">"サーヴァントの優先順位を設定する"</string>
     <string name="p_battle_config_support">"サポート"</string>
     <string name="p_battle_config_support_selection_mode">"選択モード"</string>
     <string name="p_battle_config_support_fallback_selection_mode">"フォールバック"</string>
     <string name="p_battle_config_support_pref_servants">"選択するサーヴァント"</string>
     <string name="p_battle_config_support_max_ascended">"最終再臨"</string>
+    <string name="p_battle_config_support_grand_servant">"グランドサーヴァント"</string>
+    <string name="p_battle_config_support_bond_ce_effect_preference">"選択する絆礼装の効果"</string>
+    <string name="p_battle_config_support_require_both_normal_and_reward_match">"通常礼装＆報酬アップ(絆/FP/QP/EXP)礼装の両方に一致"</string>
+    <string name="bond_ce_effect_ignore">"判定をスキップする"</string>
+    <string name="bond_ce_effect_default">"通常効果"</string>
+    <string name="bond_ce_effect_np">"NPチャージ"</string>
     <string name="p_battle_config_support_pref_ces">"選択する概念礼装"</string>
     <string name="p_battle_config_support_mlb">"最大進化"</string>
     <string name="p_battle_config_support_friend_names">"フレンド名"</string>
@@ -176,6 +181,8 @@
     <string name="card_priority">"カードの優先順位"</string>
     <string name="p_refill_type_gold">"黄金の果実"</string>
     <string name="p_refill_type_silver">"白銀の果実"</string>
+
+    <!-- Fuzzy -->
     <string name="p_refill_type_bronze">"青銅の果実"</string>
     <string name="p_refill_type_copper">"赤銅の果実"</string>
     <string name="p_refill_type_sq">"聖晶石"</string>
@@ -214,6 +221,8 @@
     <string name="p_support_class_berserker">"Berserker"</string>
     <string name="p_support_class_extra">"Extra"</string>
     <string name="p_support_class_mix">"Mix"</string>
+
+    <!-- Fuzzy -->
     <string name="overlay_notification_text">"オーバーレイサービスの開始"</string>
     <string name="notification_stop">"停止"</string>
     <string name="accessibility_service">"ユーザー補助: "</string>
@@ -242,7 +251,6 @@
     <string name="present_box_full">"プレゼントボックスがいっぱいです"</string>
     <string name="support_img_maker_not_found">"現在の画面でサポート画像を見つけることができません。サポート選択またはフレンドリストになっていませんか?"</string>
     <string name="support_selection_manual">"サポート選択を手動に設定"</string>
-    <string name="support_selection_friend_not_set">"サポート選択にフレンド指定をする場合、フレンド名を1つ以上選択してください。"</string>
     <string name="support_selection_preferred_not_set">"サポート選択に優先を使用する場合、サーヴァントか概念礼装を1つ以上選択してください。"</string>
     <string name="ce_dropped">"概念礼装がドロップ！"</string>
     <string name="ce_get">"概念礼装を入手！"</string>
@@ -261,8 +269,12 @@
     <string name="times_withdrew">"%d 回撤退しました"</string>
     <string name="avg_time_per_run">"1回あたりの平均時間: %s"</string>
     <string name="turns_count">"ターン数: %d"</string>
-    <string name="turns_stats">"ターン数: %1$d (最小), %2$d (平均), %3$d (最大)"</string>
-    <string name="picked_exp_stacks">"%d 個の種火を選び受け取りました。"</string>
+
+    <!-- Fuzzy -->
+    <string name="turns_stats">"ターン数: %1$d (最小), %2$.02f (平均), %3$d (最大)"</string>
+
+    <!-- Fuzzy -->
+    <string name="picked_exp_stacks">%1$d 個の種火を選び受け取りました。</string>
     <string name="no_embers_found">"画面上に「種火」が見つかりません。サーヴァント(経験値)のフィルタリングを確認してください。"</string>
     <string name="root_failed">"ルート権限の取得に失敗"</string>
     <string name="p_mats">"素材"</string>
@@ -325,6 +337,12 @@
     <string name="mat_vestige_of_madness">"狂気の残滓"</string>
     <string name="mat_sunscale">"太陽皮"</string>
     <string name="mat_converger">"エーテル収光体"</string>
+    <string name="mat_flower_of_the_end">"終の花"</string>
+    <string name="mat_golden_cauldron">"黄金釜"</string>
+    <string name="mat_universal_cube">"ユニバーサルキューブ"</string>
+    <string name="mat_moonlight_nucleus">"月光核"</string>
+    <string name="mat_divine_lens">"神彩のレンズ"</string>
+    <string name="mat_holy_water_of_destiny">"天命の聖水"</string>
     <string name="mat_monument_saber">"セイバー モニュメント"</string>
     <string name="mat_monument_archer">"アーチャー モニュメント"</string>
     <string name="mat_monument_lancer">"ランサー モニュメント"</string>
@@ -381,7 +399,7 @@
 
 ボタンを押した後、アプリフィルターを「最近開いたアプリ」から「すべてのアプリ」に切り替え、FGAを「制限なし」に設定してください。"</string>
     <string name="p_battery_optimization_action">"バッテリー使用最適化が無効"</string>
-    <string name="p_battery_optimization_dontkillmyapp">"また、お使いのデバイス固有の最適化を無効にする必要があるかもしれません。ガイドはdontkillmyapp.comでご覧いただけます。"</string>
+    <string name="p_battery_optimization_dontkillmyapp">"また、お使いのデバイス固有の最適化を無効にする必要があるかもしれません。ガイドは%sでご覧いただけます。"</string>
     <string name="p_youtube_guide">"Youtube ガイド"</string>
     <string name="p_youtube_guide_description">"Youtube ガイドを見ることをお勧めします。このビデオで設定方法を教えてくれます。"</string>
     <string name="p_youtube_guide_action">"ガイドを開く"</string>
@@ -389,5 +407,10 @@
     <string name="support_imgs_extracting">"サポート画像を抽出"</string>
     <string name="p_max_gold_ember_total_count">"受け取った種火の総数"</string>
     <string name="update_download_success">"ダウンロード成功。5秒後に再起動します。"</string>
-    <string name="skill_maker_melusine">"メリュジーヌ"</string>
+    <string name="skill_maker_soujuurou">"静希草十郎"</string>
+    <string name="skill_maker_kukulkan_choice_1">"スター消費しない"</string>
+    <string name="skill_maker_kukulkan_choice_2">"10個消費する"</string>
+
+    <string name="p_battle_config_use_servant_priority">"サーヴァントの優先順位を設定する"</string>
+
 </resources>

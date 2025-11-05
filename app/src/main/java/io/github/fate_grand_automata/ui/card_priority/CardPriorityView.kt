@@ -11,7 +11,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -49,7 +49,7 @@ fun CardPriorityView(
 
             val servantPriority by useServantPriority.remember()
             useServantPriority.SwitchPreference(
-                title = stringResource(R.string.p_battle_config_servant_priority),
+                title = stringResource(R.string.p_battle_config_use_servant_priority),
                 modifier = Modifier
                     .padding(bottom = 16.dp)
             )
@@ -60,7 +60,7 @@ fun CardPriorityView(
                 onSelectedWaveChange = { scope.launch { pagerState.animateScrollToPage(it) } },
             )
 
-            Divider()
+            HorizontalDivider()
 
             HorizontalPager(
                 state = pagerState,

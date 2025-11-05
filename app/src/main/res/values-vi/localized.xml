@@ -34,10 +34,8 @@ Bảo Khí"</string>
     <string name="skill_maker_atk_next_wave">"Lượt tiếp theo"</string>
     <string name="skill_maker_atk_next_turn">"Lượt tiếp treo trong một lượt quái"</string>
     <string name="skill_maker_main_enemy">"Quái %d"</string>
-    <string name="skill_maker_main_battle">"Trận đấu: %d"</string>
     <string name="skill_maker_main_master_skills">"Kĩ năng 
 Master"</string>
-    <string name="skill_maker_main_undo">"Làm lại"</string>
     <string name="skill_maker_main_clear">"Dọn sạch"</string>
     <string name="skill_maker_main_servant">"Servant %d"</string>
     <string name="skill_maker_main_attack">"Tấn công"</string>
@@ -62,6 +60,7 @@ Master"</string>
     <string name="skill_maker_kukulkan">"Kukulkan"</string>
     <string name="skill_maker_option_1">"Lựa chọn 1"</string>
     <string name="skill_maker_option_2">"Lựa chọn 2"</string>
+    <string name="skill_maker_option_3">"Lựa chọn 3"</string>
     <string name="card_priority_wave_number">"LƯỢT QUÁI %d"</string>
     <string name="card_priority_high">"LỚN"</string>
     <string name="card_priority_low">"BÉ"</string>
@@ -93,12 +92,17 @@ Master"</string>
     <string name="p_battle_config_party">"Tổ đội"</string>
     <string name="p_battle_config_server">"Máy chủ"</string>
     <string name="p_battle_config_card_priority">"Ưu tiên thẻ"</string>
-    <string name="p_battle_config_servant_priority">"Sử dụng ưu tiên Servant"</string>
     <string name="p_battle_config_support">"Hỗ trợ"</string>
     <string name="p_battle_config_support_selection_mode">"Lựa chọn chế độ"</string>
     <string name="p_battle_config_support_fallback_selection_mode">"Dự phòng"</string>
     <string name="p_battle_config_support_pref_servants">"Servants được ưu tiên"</string>
     <string name="p_battle_config_support_max_ascended">"Tăng tối đa"</string>
+    <string name="p_battle_config_support_grand_servant">"Grand Servant"</string>
+    <string name="p_battle_config_support_bond_ce_effect_preference">"Bond CE effect preference"</string>
+    <string name="p_battle_config_support_require_both_normal_and_reward_match">"Match both free slot &amp; bonus-up (Bond/FP/QP/EXP) slot"</string>
+    <string name="bond_ce_effect_ignore">"Ignore"</string>
+    <string name="bond_ce_effect_default">"Default effects"</string>
+    <string name="bond_ce_effect_np">"NP charge"</string>
     <string name="p_battle_config_support_pref_ces">"CEs được ưu tiên"</string>
     <string name="p_battle_config_support_mlb">"Giới hạn tối đa được phá vỡ"</string>
     <string name="p_battle_config_support_friend_names">"Tên của bạn bè"</string>
@@ -173,7 +177,9 @@ Sao chép hoặc đổi tên nó nếu bạn muốn giữ nó."</string>
     <string name="card_priority">"Ưu tiên thẻ"</string>
     <string name="p_refill_type_gold">"Vàng"</string>
     <string name="p_refill_type_silver">"Bạc"</string>
-    <string name="p_refill_type_bronze">"Đồng"</string>
+
+    <!-- Fuzzy -->
+    <string name="p_refill_type_bronze">"Xanh"</string>
     <string name="p_refill_type_copper">"Đồng"</string>
     <string name="p_refill_type_sq">"SQ"</string>
     <string name="p_brave_chains_don_t_care">"không quan tâm"</string>
@@ -209,6 +215,8 @@ Sao chép hoặc đổi tên nó nếu bạn muốn giữ nó."</string>
     <string name="p_support_class_berserker">"Berseker"</string>
     <string name="p_support_class_extra">"Extra"</string>
     <string name="p_support_class_mix">"Trộn"</string>
+
+    <!-- Fuzzy -->
     <string name="overlay_notification_text">"Dịch vụ đang chạy"</string>
     <string name="notification_stop">"Dừng lại"</string>
     <string name="accessibility_service">"Dịch vụ tiếp cận: "</string>
@@ -237,7 +245,6 @@ Vui lòng bật khả năng truy cập cho ứng dụng này từ cài đặt H�
     <string name="present_box_full">"Hộp quà đã đầy"</string>
     <string name="support_img_maker_not_found">"Không tìm thấy hình ảnh hỗ trợ nào trên màn hình hiện tại. Bạn đang ở màn hình Lựa chọn hỗ trợ hay Danh sách bạn bè?"</string>
     <string name="support_selection_manual">"Lựa chọn hỗ trợ được đặt thành Thủ công"</string>
-    <string name="support_selection_friend_not_set">"Khi sử dụng chế độ chọn hỗ trợ 'bạn bè', hãy chỉ định ít nhất một tên người bạn."</string>
     <string name="support_selection_preferred_not_set">"Khi sử dụng chế độ lựa chọn hỗ trợ 'ưa thích', hãy chỉ định ít nhất một Servanthoặc CE."</string>
     <string name="ce_dropped">"CE đã đánh rơi!"</string>
     <string name="ce_get">"CE NHẬN!"</string>
@@ -254,8 +261,12 @@ Vui lòng bật khả năng truy cập cho ứng dụng này từ cài đặt H�
     <string name="times_withdrew">"Đã đầu hàng %d lần"</string>
     <string name="avg_time_per_run">"Thời gian trung bình mỗi lần chạy: %s"</string>
     <string name="turns_count">"Lượt: %d"</string>
-    <string name="turns_stats">"Lượt: %1$d (phút), %2$d (trung bình), %3$d (tối đa)"</string>
-    <string name="picked_exp_stacks">"Đã chọn %d EXP, tạo ra tổng số %d Embers vàng"</string>
+
+    <!-- Fuzzy -->
+    <string name="turns_stats">"Lượt: %1$d (phút), %2$.02f (trung bình), %3$d (tối đa)"</string>
+
+    <!-- Fuzzy -->
+    <string name="picked_exp_stacks">Đã chọn %1$d EXP, tạo ra tổng số %2$d Embers vàng</string>
     <string name="no_embers_found">"Không thể tìm thấy Embers trên màn hình. Đảm bảo rằng bạn đã lọc thẻ EXP."</string>
     <string name="root_failed">"Không thể truy cập quyền root"</string>
     <string name="p_mats">"Nguyên vật liệu"</string>
@@ -374,7 +385,7 @@ Vui lòng bật khả năng truy cập cho ứng dụng này từ cài đặt H�
 
 Sau khi nhấn nút, hãy chuyển bộ lọc ứng dụng từ \"Không được tối ưu hóa\" sang \"Tất cả ứng dụng\" và đặt FGA thành \"Không tối ưu hóa\"."</string>
     <string name="p_battery_optimization_action">"Vô hiệu hóa tối ưu hóa pin"</string>
-    <string name="p_battery_optimization_dontkillmyapp">"Bạn cũng có thể cần phải tắt nhiều tối ưu hóa cụ thể hơn cho thiết bị của mình. Hướng dẫn có sẵn trên dontkillmyapp.com."</string>
+    <string name="p_battery_optimization_dontkillmyapp">"Bạn cũng có thể cần phải tắt nhiều tối ưu hóa cụ thể hơn cho thiết bị của mình. Hướng dẫn có sẵn trên %s."</string>
     <string name="p_youtube_guide">"Hướng dẫn trên Youtube"</string>
     <string name="p_youtube_guide_description">"Bạn nên xem hướng dẫn Youtube vì nó sẽ hướng dẫn bạn cách thiết lập cấu hình khi farm."</string>
     <string name="p_youtube_guide_action">"Mở hướng dẫn"</string>
@@ -382,5 +393,5 @@ Sau khi nhấn nút, hãy chuyển bộ lọc ứng dụng từ \"Không đượ
     <string name="support_imgs_extracting">"Trích xuất hình ảnh hỗ trợ"</string>
     <string name="p_max_gold_ember_total_count">"Tổng số lượng than hồng vàng tối đa"</string>
     <string name="update_download_success">"Tải xuống thành công. Khởi động lại ứng dụng sau 5 giây."</string>
-    <string name="skill_maker_melusine">"Mélusine"</string>
-</resources>
+    <string name="p_battle_config_use_servant_priority">"Sử dụng ưu tiên Servant"</string>
+                                                                                                                        </resources>

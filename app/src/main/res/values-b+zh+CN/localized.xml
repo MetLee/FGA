@@ -35,9 +35,7 @@
     <string name="skill_maker_atk_next_turn">"下一回合
 （同一波敌人）"</string>
     <string name="skill_maker_main_enemy">"敌人 %d"</string>
-    <string name="skill_maker_main_battle">"战斗 %d"</string>
     <string name="skill_maker_main_master_skills">"御主技能"</string>
-    <string name="skill_maker_main_undo">"复原"</string>
     <string name="skill_maker_main_clear">"重设"</string>
     <string name="skill_maker_main_servant">"从者 %d"</string>
     <string name="skill_maker_main_attack">"攻击"</string>
@@ -63,6 +61,7 @@ Order Change"</string>
     <string name="skill_maker_kukulkan">"库库尔坎"</string>
     <string name="skill_maker_option_1">"选项1"</string>
     <string name="skill_maker_option_2">"选项2"</string>
+    <string name="skill_maker_option_3">"选项3"</string>
     <string name="card_priority_wave_number">"战斗 %d"</string>
     <string name="card_priority_high">"优先选出"</string>
     <string name="card_priority_low">"尽量不选出"</string>
@@ -94,13 +93,18 @@ Order Change"</string>
     <string name="p_battle_config_party">"队伍编号"</string>
     <string name="p_battle_config_server">"区服"</string>
     <string name="p_battle_config_card_priority">"指令卡优先级"</string>
-    <string name="p_battle_config_servant_priority">"使用从者优先级"</string>
     <string name="p_battle_config_support">"助战从者"</string>
     <string name="p_battle_config_support_selection_mode">"助战从者选取方式"</string>
     <string name="p_battle_config_support_fallback_selection_mode">"备用选取方式"</string>
     <string name="p_battle_config_support_pref_servants">"偏好从者"</string>
     <string name="p_battle_config_support_max_ascended">"最终再临"</string>
     <string name="p_battle_config_support_pref_ces">"偏好礼装"</string>
+    <string name="p_battle_config_support_grand_servant">"冠位从者"</string>
+    <string name="p_battle_config_support_bond_ce_effect_preference">"Bond CE effect preference"</string>
+    <string name="p_battle_config_support_require_both_normal_and_reward_match">"Match both free slot &amp; bonus-up (Bond/FP/QP/EXP) slot"</string>
+    <string name="bond_ce_effect_ignore">"Ignore"</string>
+    <string name="bond_ce_effect_default">"Default effects"</string>
+    <string name="bond_ce_effect_np">"NP charge"</string>
     <string name="p_battle_config_support_mlb">"满破礼装"</string>
     <string name="p_battle_config_support_friend_names">"好友名称"</string>
     <string name="p_battle_config_support_friends_only">"只选择好友从者"</string>
@@ -175,6 +179,8 @@ Order Change"</string>
     <string name="card_priority">"指令卡优先级"</string>
     <string name="p_refill_type_gold">"黄金果实"</string>
     <string name="p_refill_type_silver">"白银果实"</string>
+
+    <!-- Fuzzy -->
     <string name="p_refill_type_bronze">"青铜果实"</string>
     <string name="p_refill_type_copper">"赤铜果实"</string>
     <string name="p_refill_type_sq">"圣晶石"</string>
@@ -211,6 +217,8 @@ Order Change"</string>
     <string name="p_support_class_berserker">"Berserker"</string>
     <string name="p_support_class_extra">"Extra"</string>
     <string name="p_support_class_mix">"混合职介（Mix）"</string>
+
+    <!-- Fuzzy -->
     <string name="overlay_notification_text">"服务启动中"</string>
     <string name="notification_stop">"停止"</string>
     <string name="accessibility_service">"无障碍服务："</string>
@@ -239,7 +247,6 @@ Order Change"</string>
     <string name="present_box_full">"礼物盒已满"</string>
     <string name="support_img_maker_not_found">"无法检测到助战，请到好友选择画面或助战选择画面再次执行"</string>
     <string name="support_selection_manual">"已切换至手动选择助战从者"</string>
-    <string name="support_selection_friend_not_set">"使用“好友助战”时请设定偏好好友"</string>
     <string name="support_selection_preferred_not_set">"使用“偏好助战”时请设定偏好从者或偏好礼装"</string>
     <string name="ce_dropped">"礼装掉落！"</string>
     <string name="ce_get">"获得礼装！"</string>
@@ -256,8 +263,12 @@ Order Change"</string>
     <string name="times_withdrew">"已撤退 %d 次"</string>
     <string name="avg_time_per_run">"平均一场时间：%s"</string>
     <string name="turns_count">"回合 %d"</string>
-    <string name="turns_stats">"回合: %1$d（最少）, %2$d（平均）, %3$d（最多）"</string>
-    <string name="picked_exp_stacks">"已挑选 %d 堆种火，共挑选 %d 枚种火"</string>
+
+    <!-- Fuzzy -->
+    <string name="turns_stats">"回合: %1$d（最少）, %2$.02f（平均）, %3$d（最多）"</string>
+
+    <!-- Fuzzy -->
+    <string name="picked_exp_stacks">已挑选 %1$d 堆种火，共挑选 %2$d 枚种火</string>
     <string name="no_embers_found">"无法在屏幕上找到种火，请确保经验卡的筛选已打开"</string>
     <string name="root_failed">"Root权限获取失败"</string>
     <string name="p_mats">"追踪掉落素材"</string>
@@ -320,6 +331,10 @@ Order Change"</string>
     <string name="mat_vestige_of_madness">"疯狂的残渣（暂译）"</string>
     <string name="mat_sunscale">"太阳皮（暂译）"</string>
     <string name="mat_converger">"以太蓄光体（暂译）"</string>
+    <string name="mat_flower_of_the_end">"终之花"</string>
+    <string name="mat_golden_cauldron">"黄金釜"</string>
+    <string name="mat_universal_cube">"宇宙立方体"</string>
+    <string name="mat_moonlight_nucleus">"月光核"</string>
     <string name="mat_monument_saber">"剑阶金像"</string>
     <string name="mat_monument_archer">"弓阶金像"</string>
     <string name="mat_monument_lancer">"枪阶金像"</string>
@@ -376,7 +391,7 @@ Order Change"</string>
 
 在点击下方按钮后，将应用程序筛选器由“未优化”切换到“所有应用”，并将下方FGA设置变更为“不优化”"</string>
     <string name="p_battery_optimization_action">"关闭电池优化"</string>
-    <string name="p_battery_optimization_dontkillmyapp">"取决于您的设备，您可能还需要禁用更多的优化设置。您可以在dontkillmyapp.com（英文页面）上找到更多教程"</string>
+    <string name="p_battery_optimization_dontkillmyapp">"取决于您的设备，您可能还需要禁用更多的优化设置。您可以在%s（英文页面）上找到更多教程"</string>
     <string name="p_youtube_guide">"Youtube教学视频"</string>
     <string name="p_youtube_guide_description">"推荐您观看教学视频，它将指导您如何设置周回脚本（英语视频，需要科学上网）"</string>
     <string name="p_youtube_guide_action">"打开教学视频"</string>
@@ -384,5 +399,16 @@ Order Change"</string>
     <string name="support_imgs_extracting">"正在提取助战图片"</string>
     <string name="p_max_gold_ember_total_count">"金种火最大领取数（枚数）"</string>
     <string name="update_download_success">"下载成功。5秒后将重启APP。"</string>
-    <string name="skill_maker_melusine">"妖兰/梅柳齐娜"</string>
-</resources>
+    <string name="p_battle_config_use_servant_priority">"使用从者优先级"</string>
+    <string name="reset_all">"全部重置"</string>
+    <string name="reset_to_default">"重置为默认值"</string>
+    <string name="p_choose_app_language">"选择语言"</string>
+    <string name="p_app_language">"语言"</string>
+    <string name="p_treat_support_like_own_servant">"助战从者视为自有从者"</string>
+    <string name="p_treat_support_like_own_servant_summary">"从者头像检查时将不再匹配助战图标。该功能可解决助战从者带有过多buff时引发的识别问题。但当队伍中有两名相同从者时，该功能可能会破坏指令卡优先级的设定。"</string>
+    <string name="skill_maker_main_delete_selected">"删除所选"</string>
+    <string name="skill_maker_main_wave">"第 %d 波"</string>
+    <string name="skill_maker_main_turn">"第 %d 回合"</string>
+                <string name="servant_enhancement">"从者强化"</string>
+        <string name="servert_enhancement_warning_notice">"该脚本将使用自动选择功能来选择种火。"</string>
+                                                    </resources>

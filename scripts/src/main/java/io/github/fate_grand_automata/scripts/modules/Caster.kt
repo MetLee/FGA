@@ -43,7 +43,7 @@ class Caster @Inject constructor(
 
     private fun confirmSkillUse() {
         if (skillConfirmation == null) {
-            skillConfirmation = images[Images.SkillUse] in locations.battle.skillUseRegion
+            skillConfirmation = locations.battle.skillUseRegion.exists(images[Images.SkillUse], 0.5.seconds)
         }
         if (skillConfirmation == true) {
             locations.battle.skillOkClick.click()
@@ -72,7 +72,7 @@ class Caster @Inject constructor(
         // If we wait for too long here, the vanishing Attack button will not be detected in waitForAnimationToFinish()
         locations.battle.extraInfoWindowCloseClick.click()
 
-        if (targets.contains(ServantTarget.Melusine)) {
+        if (targets.contains(ServantTarget.Transform)) {
             // wait extra for Mélusine and then add her 3rd Ascension image
             waitForAnimationToFinish(15.seconds)
             val slot = when (skill) {
@@ -129,7 +129,8 @@ class Caster @Inject constructor(
     private fun openMasterSkillMenu() {
         locations.battle.master.masterSkillOpenClick.click()
 
-        0.5.seconds.wait()
+        // Increased from 0.5 to 1.5 seconds to account for slower devices and ensure the menu opens reliably.
+        1.5.seconds.wait()
     }
 
     fun castMasterSkill(skill: Skill.Master, target: ServantTarget? = null) {

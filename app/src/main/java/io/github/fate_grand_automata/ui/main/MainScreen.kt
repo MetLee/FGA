@@ -16,8 +16,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.Card
-import androidx.compose.material3.Divider
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -45,12 +48,14 @@ import io.github.fate_grand_automata.R
 import io.github.fate_grand_automata.accessibility.TapperService
 import io.github.fate_grand_automata.runner.ScriptRunnerService
 import io.github.fate_grand_automata.scripts.prefs.wantsMediaProjectionToken
-import io.github.fate_grand_automata.ui.FgaDialog
 import io.github.fate_grand_automata.ui.Heading
 import io.github.fate_grand_automata.ui.HeadingButton
 import io.github.fate_grand_automata.ui.OnResume
 import io.github.fate_grand_automata.ui.StartMediaProjection
+import io.github.fate_grand_automata.ui.dialog.FgaDialog
 import io.github.fate_grand_automata.ui.icon
+import io.github.fate_grand_automata.ui.prefs.LanguagePref
+import io.github.fate_grand_automata.ui.prefs.ListPreference
 import io.github.fate_grand_automata.ui.prefs.Preference
 import io.github.fate_grand_automata.util.OpenDocTreePersistable
 
@@ -157,7 +162,8 @@ fun MainScreen(
             } else {
                 navigate(MainScreenDestinations.AccessibilitySettings)
             }
-        }
+        },
+        languagePref = LanguagePref()
     )
 }
 
@@ -189,13 +195,15 @@ private fun toggleOverlayService(
     if (ScriptRunnerService.serviceStarted.value) {
         ScriptRunnerService.stopService(context)
     } else {
-        ScriptRunnerService.startService(context)
-
         if (vm.prefs.wantsMediaProjectionToken) {
             if (ScriptRunnerService.mediaProjectionToken == null) {
                 startMediaProjection()
+                return
             }
         }
+
+        // if we already have a token or are using root mode
+        ScriptRunnerService.startService(context)
     }
 }
 
@@ -216,7 +224,8 @@ private fun MainScreenContent(
     overlayServiceStarted: Boolean,
     toggleOverlayService: () -> Unit,
     accessibilityServiceStarted: Boolean,
-    toggleAccessibilityService: () -> Unit
+    toggleAccessibilityService: () -> Unit,
+    languagePref: LanguagePref
 ) {
     Box {
         LazyColumn(
@@ -254,7 +263,11 @@ private fun MainScreenContent(
             item {
                 Card(
                     modifier = Modifier
-                        .padding(16.dp)
+                        .padding(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 ) {
                     Column {
                         Preference(
@@ -264,7 +277,15 @@ private fun MainScreenContent(
                             onClick = { navigate(MainScreenDestinations.BattleConfigs) }
                         )
 
-                        Divider()
+                        HorizontalDivider()
+
+                        languagePref.ListPreference(
+                            title = stringResource(R.string.p_app_language),
+                            icon = icon(Icons.Default.Language),
+                            entries = LanguagePref.availableLanguages()
+                        )
+
+                        HorizontalDivider()
 
                         Preference(
                             title = stringResource(R.string.p_more_options),
@@ -340,7 +361,11 @@ private fun AccessibilityServiceBlock(
     Card(
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     ) {
         Column(
             modifier = Modifier

@@ -14,7 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -57,9 +57,9 @@ private val Duration.stringify: String
 private fun AutoBattle.ExitReason.text(): String = when (this) {
     AutoBattle.ExitReason.Abort -> stringResource(R.string.stopped_by_user)
     is AutoBattle.ExitReason.Unexpected -> {
-        e.let {
+        cause.let {
             if (it is KnownException) it.reason.msg
-            else "${stringResource(R.string.unexpected_error)}: ${e.message}"
+            else "${stringResource(R.string.unexpected_error)}: ${cause?.message}"
         }
     }
 
@@ -71,9 +71,8 @@ private fun AutoBattle.ExitReason.text(): String = when (this) {
     AutoBattle.ExitReason.InventoryFull -> stringResource(R.string.inventory_full)
     is AutoBattle.ExitReason.LimitRuns -> stringResource(R.string.times_ran, count)
     AutoBattle.ExitReason.SupportSelectionManual -> stringResource(R.string.support_selection_manual)
-    AutoBattle.ExitReason.SupportSelectionFriendNotSet -> stringResource(R.string.support_selection_friend_not_set)
     AutoBattle.ExitReason.SupportSelectionPreferredNotSet -> stringResource(R.string.support_selection_preferred_not_set)
-    is AutoBattle.ExitReason.SkillCommandParseError -> "AutoSkill Parse error:\n\n${e.message}"
+    is AutoBattle.ExitReason.SkillCommandParseError -> "AutoSkill Parse error:\n\n${cause?.message}"
     is AutoBattle.ExitReason.CardPriorityParseError -> msg
     AutoBattle.ExitReason.FirstClearRewards -> stringResource(R.string.first_clear_rewards)
     AutoBattle.ExitReason.Paused -> stringResource(R.string.script_paused)
@@ -307,12 +306,12 @@ fun BattleExit(
                 battleExitContent(
                     reason = exception.reason,
                     state = exception.state,
-                    refillEnabled = prefs.refill.resources.isNotEmpty()
+                    refillEnabled = prefs.selectedServerConfigPref.resources.isNotEmpty()
                 )
             }
 
             if (exception.reason is AutoBattle.ExitReason.Paused) {
-                Divider()
+                HorizontalDivider()
 
                 Row(
                     modifier = Modifier
@@ -331,12 +330,12 @@ fun BattleExit(
 
                     Switch(
                         checked = stopAfterThisRun,
-                        onCheckedChange = { stopAfterThisRun = true }
+                        onCheckedChange = { stopAfterThisRun = it }
                     )
                 }
             }
 
-            Divider()
+            HorizontalDivider()
 
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -344,7 +343,7 @@ fun BattleExit(
             ) {
                 Row {
                     val allowCopy = exception.reason.let { reason ->
-                        reason is AutoBattle.ExitReason.Unexpected && reason.e !is KnownException
+                        reason is AutoBattle.ExitReason.Unexpected && reason.cause !is KnownException
                     }
 
                     if (allowCopy) {
@@ -392,7 +391,7 @@ fun PreviewBattleExitContent() {
                     averageTimePerRun = 75.seconds,
                     minTurnsPerRun = 3,
                     maxTurnsPerRun = 4,
-                    averageTurnsPerRun = 6
+                    averageTurnsPerRun = 3.45678
                 ),
                 refillEnabled = true
             )

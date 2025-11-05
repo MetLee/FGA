@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
 
@@ -20,6 +22,7 @@ buildscript {
 }
 plugins {
     alias(libs.plugins.ben.manes.versions)
+    alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.ksp) apply false
 }
 
@@ -35,15 +38,13 @@ allprojects {
 
 subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-        kotlinOptions {
-            freeCompilerArgs += "-opt-in=kotlin.time.ExperimentalTime"
-
-            // Set JVM target to 11
-            jvmTarget = "11"
+        compilerOptions {
+            freeCompilerArgs.add("-opt-in=kotlin.time.ExperimentalTime")
+            jvmTarget.set(JvmTarget.JVM_11)
         }
     }
 }
 
 tasks.register<Delete>("clean") {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }

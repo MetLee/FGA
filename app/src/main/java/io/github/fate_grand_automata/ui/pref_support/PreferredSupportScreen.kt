@@ -1,5 +1,6 @@
 package io.github.fate_grand_automata.ui.pref_support
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,12 +9,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults.cardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardDefaults.cardElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,11 +27,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.fate_grand_automata.R
 import io.github.fate_grand_automata.prefs.core.Pref
 import io.github.fate_grand_automata.prefs.core.SupportPrefsCore
+import io.github.fate_grand_automata.scripts.enums.BondCEEffectEnum
 import io.github.fate_grand_automata.ui.Heading
 import io.github.fate_grand_automata.ui.OnResume
+import io.github.fate_grand_automata.ui.icon
+import io.github.fate_grand_automata.ui.prefs.ListPreference
+import io.github.fate_grand_automata.ui.prefs.Preference
 import io.github.fate_grand_automata.ui.prefs.PreferenceGroupHeader
 import io.github.fate_grand_automata.ui.prefs.SwitchPreference
 import io.github.fate_grand_automata.ui.prefs.remember
+import io.github.fate_grand_automata.util.stringRes
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun PreferredSupportScreen(
@@ -43,8 +52,14 @@ fun PreferredSupportScreen(
 
     val context = LocalContext.current
 
+    val scope = rememberCoroutineScope()
+
     OnResume {
-        supportVm.refresh(context)
+        scope.launch(Dispatchers.IO) {
+            if (supportVm.shouldExtractSupportImages) {
+                supportVm.performSupportImageExtraction(context)
+            } else supportVm.refresh(context)
+        }
     }
 }
 
@@ -62,15 +77,13 @@ private fun PreferredSupport(
         }
 
         item {
-            config.friendsOnly.SwitchPreference(
-                title = stringResource(R.string.p_battle_config_support_friends_only)
-            )
-        }
-
-        item {
             Card(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             ) {
                 Column(
                     modifier = Modifier
@@ -88,6 +101,10 @@ private fun PreferredSupport(
                     if (prefServants.isNotEmpty()) {
                         config.maxAscended.SwitchPreference(
                             title = stringResource(R.string.p_battle_config_support_max_ascended)
+                        )
+
+                        config.grandServant.SwitchPreference(
+                            title = stringResource(R.string.p_battle_config_support_grand_servant)
                         )
 
                         Row(
@@ -115,7 +132,11 @@ private fun PreferredSupport(
         item {
             Card(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             ) {
                 Column(
                     modifier = Modifier
@@ -134,6 +155,16 @@ private fun PreferredSupport(
                         config.mlb.SwitchPreference(
                             title = stringResource(R.string.p_battle_config_support_mlb)
                         )
+
+                        config.bondCEEffect.ListPreference(
+                            title = stringResource(R.string.p_battle_config_support_bond_ce_effect_preference),
+                            entries = BondCEEffectEnum.entries
+                                .associateWith { stringResource(it.stringRes) }
+                        )
+
+                        config.requireBothNormalAndRewardMatch.SwitchPreference(
+                            title = stringResource(R.string.p_battle_config_support_require_both_normal_and_reward_match)
+                        )
                     }
                 }
             }
@@ -142,7 +173,49 @@ private fun PreferredSupport(
         item {
             Card(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            ) {
+                Column {
+                    PreferenceGroupHeader(
+                        title = stringResource(R.string.p_support_mode_friend)
+                    )
+
+                    config.friendsOnly.SwitchPreference(
+                        title = stringResource(R.string.p_battle_config_support_friends_only)
+                    )
+
+                    val friendsOnly by config.friendsOnly.remember()
+
+                    AnimatedVisibility (friendsOnly) {
+                        if (vm.friends.isNotEmpty()) {
+                            config.friendNames.SupportSelectPreference(
+                                title = stringResource(R.string.p_battle_config_support_friend_names),
+                                entries = vm.friends
+                            )
+                        } else {
+                            Preference(
+                                icon = icon(R.drawable.ic_info),
+                                title = stringResource(R.string.p_battle_config_support_friend_names),
+                                summary = stringResource(R.string.p_battle_config_support_friend_name_hint)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        item {
+            Card(
+                modifier = Modifier
+                    .padding(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             ) {
                 PreferredSupportHelp()
             }
@@ -200,7 +273,7 @@ private fun MaxSkills(
 
             Card(
                 elevation = cardElevation(5.dp),
-                colors = cardColors(
+                colors = CardDefaults.cardColors(
                     containerColor = backgroundColor,
                     contentColor = foregroundColor
                 )

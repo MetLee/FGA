@@ -6,7 +6,6 @@ import androidx.compose.material.icons.filled.FastForward
 import androidx.compose.material.icons.filled.NoAccounts
 import androidx.compose.material.icons.filled.OfflineBolt
 import androidx.compose.material.icons.filled.Public
-import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import io.github.fate_grand_automata.R
@@ -79,6 +78,21 @@ fun LazyListScope.battleGroup(
             icon = icon(R.drawable.ic_screenshot)
         )
     }
+    item {
+        prefs.screenshotBond.SwitchPreference(
+            title = stringResource(R.string.p_screenshot_bond),
+            summary = stringResource(R.string.p_screenshot_bond_summary),
+            icon = icon(R.drawable.ic_screenshot)
+        )
+    }
+
+    item {
+        prefs.hideSQInAPResources.SwitchPreference(
+            title = stringResource(R.string.p_hide_sq_in_resource),
+            summary = stringResource(R.string.p_hide_sq_in_resource_summary),
+            icon = icon(R.drawable.ic_apple)
+        )
+    }
 
     item {
         prefs.boostItemSelectionMode.SingleSelectChipPreference(
@@ -93,6 +107,14 @@ fun LazyListScope.battleGroup(
             title = stringResource(R.string.p_skip_servant_face_checks),
             summary = stringResource(R.string.p_skip_servant_face_checks_summary),
             icon = icon(Icons.Default.NoAccounts)
+        )
+    }
+
+    item {
+        prefs.treatSupportLikeOwnServant.SwitchPreference(
+            title = stringResource(R.string.p_treat_support_like_own_servant),
+            summary = stringResource(R.string.p_treat_support_like_own_servant_summary),
+            icon = icon(R.drawable.ic_biceps)
         )
     }
 }

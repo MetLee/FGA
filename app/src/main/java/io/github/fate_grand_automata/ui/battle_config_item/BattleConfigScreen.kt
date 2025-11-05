@@ -16,13 +16,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
-import androidx.compose.material3.Divider
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -31,29 +31,29 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.fate_grand_automata.R
 import io.github.fate_grand_automata.prefs.core.BattleConfigCore
 import io.github.fate_grand_automata.scripts.models.CardPriorityPerWave
 import io.github.fate_grand_automata.scripts.models.CardScore
-import io.github.fate_grand_automata.ui.FgaDialog
 import io.github.fate_grand_automata.ui.Heading
 import io.github.fate_grand_automata.ui.HeadingButton
-import io.github.fate_grand_automata.ui.OnResume
 import io.github.fate_grand_automata.ui.VerticalDivider
 import io.github.fate_grand_automata.ui.card_priority.getColorRes
+import io.github.fate_grand_automata.ui.dialog.FgaDialog
 import io.github.fate_grand_automata.ui.icon
-import io.github.fate_grand_automata.ui.pref_support.SupportViewModel
 import io.github.fate_grand_automata.ui.prefs.EditTextPreference
 import io.github.fate_grand_automata.ui.prefs.Preference
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import io.github.fate_grand_automata.util.toSp
 
 @Composable
 fun BattleConfigScreen(
     vm: BattleConfigScreenViewModel = viewModel(),
-    supportVm: SupportViewModel = viewModel(),
     navigate: (BattleConfigDestination) -> Unit
 ) {
     val context = LocalContext.current
@@ -64,7 +64,6 @@ fun BattleConfigScreen(
 
     BattleConfigContent(
         config = vm.battleConfigCore,
-        friendEntries = supportVm.friends,
         onExport = { battleConfigExport.launch("${vm.battleConfig.name}.fga") },
         onCopy = {
             val id = vm.createCopyAndReturnId(context)
@@ -76,16 +75,6 @@ fun BattleConfigScreen(
         },
         navigate = navigate
     )
-
-    val scope = rememberCoroutineScope()
-
-    OnResume {
-        scope.launch(Dispatchers.IO) {
-            if (supportVm.shouldExtractSupportImages) {
-                supportVm.performSupportImageExtraction(context)
-            } else supportVm.refresh(context)
-        }
-    }
 }
 
 sealed class BattleConfigDestination {
@@ -100,7 +89,6 @@ sealed class BattleConfigDestination {
 @Composable
 private fun BattleConfigContent(
     config: BattleConfigCore,
-    friendEntries: Map<String, String>,
     onExport: () -> Unit,
     onCopy: () -> Unit,
     onDelete: () -> Unit,
@@ -154,7 +142,11 @@ private fun BattleConfigContent(
                 item {
                     Card(
                         modifier = Modifier
-                            .padding(16.dp)
+                            .padding(16.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     ) {
                         Column {
                             config.name.EditTextPreference(
@@ -163,7 +155,7 @@ private fun BattleConfigContent(
                                 singleLine = true
                             )
 
-                            Divider()
+                            HorizontalDivider()
 
                             config.notes.EditTextPreference(
                                 title = stringResource(R.string.p_battle_config_notes)
@@ -176,7 +168,11 @@ private fun BattleConfigContent(
                     Card(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
-                            .padding(bottom = 16.dp)
+                            .padding(bottom = 16.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     ) {
                         SkillCommandGroup(
                             config = config,
@@ -190,7 +186,11 @@ private fun BattleConfigContent(
                     Card(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
-                            .padding(bottom = 16.dp)
+                            .padding(bottom = 5.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     ) {
                         Column {
                             Row(
@@ -230,7 +230,7 @@ private fun BattleConfigContent(
                                 PartySelection(config)
                             }
 
-                            Divider()
+                            HorizontalDivider()
 
                             val cardPriority by vm.cardPriority.collectAsState(null)
 
@@ -249,10 +249,9 @@ private fun BattleConfigContent(
                     val maxSkillText by vm.maxSkillText.collectAsState("")
 
                     SupportGroup(
-                        config = config,
+                        config = config.support,
                         goToPreferred = { navigate(BattleConfigDestination.PreferredSupport) },
-                        maxSkillText = maxSkillText,
-                        friendEntries = friendEntries
+                        maxSkillText = maxSkillText
                     )
                 }
 
@@ -288,34 +287,56 @@ private fun CardPrioritySummary(cardPriority: CardPriorityPerWave) {
                     style = MaterialTheme.typography.bodyMedium
                 )
 
-                Card {
-                    Row(
-                        modifier = Modifier
-                            .padding(horizontal = 5.dp)
-                    ) {
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                ) {
+                    val priorityString = buildAnnotatedString {
                         priorities.forEachIndexed { index, it ->
                             if (index != 0) {
-                                Text(
-                                    ",",
-                                    modifier = Modifier
-                                        .padding(end = 4.dp),
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
+                                withStyle(
+                                    style = SpanStyle(
+                                        fontFamily = MaterialTheme.typography.bodyMedium.fontFamily,
+                                        fontWeight = MaterialTheme.typography.bodyMedium.fontWeight,
+                                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                                        letterSpacing = MaterialTheme.typography.bodyMedium.letterSpacing,
+                                    )
+                                ) {
+                                    append(",")
+                                }
+                                withStyle(
+                                    style = SpanStyle(
+                                        letterSpacing = 4.dp.toSp()
+                                    )
+                                ) {
+                                    append(" ")
+                                }
                             }
-
-                            Text(
-                                it.toString(),
-                                color = it.color,
-                                style = MaterialTheme.typography.bodyMedium.copy(
+                            withStyle(
+                                style = SpanStyle(
+                                    fontFamily = MaterialTheme.typography.bodyMedium.fontFamily,
+                                    fontWeight = MaterialTheme.typography.bodyMedium.fontWeight,
+                                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                                    letterSpacing = MaterialTheme.typography.bodyMedium.letterSpacing,
+                                    color = it.color,
                                     shadow = Shadow(
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         offset = Offset(1f, 1f),
                                         blurRadius = 0f
                                     )
-                                ),
-                            )
+                                )
+                            ) {
+                                append(it.toString())
+                            }
                         }
                     }
+                    Text(
+                        text = priorityString,
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        textAlign = TextAlign.Justify
+                    )
                 }
             }
         }

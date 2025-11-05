@@ -4,10 +4,11 @@ plugins {
     id("kotlin-parcelize")
     id("dagger.hilt.android.plugin")
     id("com.google.devtools.ksp")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 35
     ndkVersion = "21.3.6528147"
 
     compileOptions {
@@ -17,26 +18,30 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
-    kotlinOptions {
-        freeCompilerArgs += "-opt-in=androidx.compose.material.ExperimentalMaterialApi"
-        freeCompilerArgs += "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
-        freeCompilerArgs += "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi"
-        freeCompilerArgs += "-opt-in=androidx.compose.animation.ExperimentalAnimationApi"
-        freeCompilerArgs += "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi"
-        freeCompilerArgs += "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi"
+    kotlin {
+        compilerOptions {
+            optIn.add("androidx.compose.material.ExperimentalMaterialApi")
+            optIn.add("androidx.compose.material.ExperimentalMaterialApi")
+            optIn.add("androidx.compose.material3.ExperimentalMaterial3Api")
+            optIn.add("androidx.compose.foundation.ExperimentalFoundationApi")
+            optIn.add("androidx.compose.animation.ExperimentalAnimationApi")
+            optIn.add("androidx.compose.ui.ExperimentalComposeUiApi")
+            optIn.add("androidx.compose.foundation.layout.ExperimentalLayoutApi")
+            optIn.add("androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi")
+        }
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.get()
+    androidResources {
+        generateLocaleConfig = true
     }
-
 
     defaultConfig {
         applicationId = "io.github.fate_grand_automata"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 35
         versionCode = System.getenv("FGA_VERSION_CODE")?.toInt() ?: 1
         versionName = System.getenv("FGA_VERSION_NAME") ?: System.getenv("FGA_VERSION_CODE") ?: "0.1.0"
     }
@@ -101,7 +106,7 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.constraintlayout)
 
-    implementation(libs.opencv.android)
+    implementation(libs.opencv)
     implementation(libs.tesseract4android)
 
     implementation(libs.lifecycle.viewmodel.ktx)
@@ -123,6 +128,7 @@ dependencies {
     implementation(libs.compose.ui.tooling)
     implementation(libs.compose.foundation)
     implementation(libs.compose.material3)
+    implementation(libs.compose.material3.window.size)
     implementation(libs.compose.material.icons.core)
     implementation(libs.compose.material.icons.extended)
 
@@ -132,9 +138,10 @@ dependencies {
 
 
 
-    implementation(libs.accompanist.pager.indicators)
     implementation(libs.accompanist.permissions)
 
     implementation(libs.google.android.play.update.ktx)
+    implementation(libs.coil)
+    implementation(libs.coil.gif)
 
 }

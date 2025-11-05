@@ -1,11 +1,13 @@
 package io.github.fate_grand_automata.scripts.locations
 
+import io.github.fate_grand_automata.scripts.enums.GameServer
 import io.github.fate_grand_automata.scripts.enums.RefillResourceEnum
 import io.github.fate_grand_automata.scripts.models.BoostItem
 import io.github.lib_automata.Location
 import io.github.lib_automata.Region
 import io.github.lib_automata.dagger.ScriptScope
 import javax.inject.Inject
+import kotlin.math.min
 import kotlin.math.roundToInt
 
 @ScriptScope
@@ -15,13 +17,28 @@ class Locations @Inject constructor(
     val lottery: LotteryLocations,
     val support: SupportScreenLocations,
     val attack: AttackScreenLocations,
-    val battle: BattleScreenLocations
+    val battle: BattleScreenLocations,
+    val servant: ServantLevelLocations,
 ) : IScriptAreaTransforms by scriptAreaTransforms {
 
-    val continueRegion = Region(120, 1000, 800, 200).xFromCenter()
+    // 9th anniversary changes the repeat screen and extends to 15 parties
+    private val afterAnni9 = gameServer is GameServer.Jp || gameServer is GameServer.Cn
+
+    val continueRegion = if (afterAnni9)
+        Region(120, 1100, 800, 200).xFromCenter()
+    else
+        Region(120, 1000, 800, 200).xFromCenter()
+
     val continueBoostClick = Location(-20, 1120).xFromCenter()
 
     val inventoryFullRegion = Region(-280, 860, 560, 190).xFromCenter()
+
+    val ordealCallOutOfPodsRegion = Region(-112, 1088, 219, 72).xFromCenter()
+
+    val ordealCallOutOfPodsClick = Location(-2, 1124).xFromCenter()
+
+    val interludeCloseClick = Location(-399, 1125).xFromCenter()
+    val interludeEndScreenClose = Region(-515, 1080, 230, 90).xFromCenter()
 
     val menuScreenRegion =
         (if (isWide)
@@ -78,11 +95,20 @@ class Locations @Inject constructor(
         BoostItem.Enabled.BoostItem3 -> Location(1280, 1000)
     }.xFromCenter()
 
-    val selectedPartyRegion = Region(-270, 62, 550, 72).xFromCenter()
-    val partySelectionArray = (0..9).map {
-        // Party indicators are center-aligned
-        val x = ((it - 4.5) * 50).roundToInt()
-
+    val selectedPartyRegion = if (afterAnni9)
+        Region(-370, 62, 740, 72).xFromCenter()
+    else
+        Region(-270, 62, 550, 72).xFromCenter()
+    
+    val partySelectionArray: List<Location> = (0..14).map {
+        val x = if (afterAnni9) {
+            // Party 8 is on the center
+            ((it - 7) * 50)
+        } else {
+            // Party indicators are center-aligned
+            // Party 11-15 are going to be on party 10 just in case
+            ((min(it, 9) - 4.5) * 50).roundToInt()
+        }
         Location(x, 100).xFromCenter()
     }
 
@@ -99,7 +125,7 @@ class Locations @Inject constructor(
     val resultMasterExpRegion = Region(0, 350, 400, 110).xFromCenter()
     val resultMasterLvlUpRegion = Region(710, 160, 250, 270).xFromCenter()
     val resultScreenRegion = Region(-1180, 300, 700, 200).xFromCenter()
-    val resultBondRegion = Region(720, 690, 120, 250).xFromCenter()
+    val resultBondRegion = Region(720, 600, 120, 400).xFromCenter()
 
     val resultCeRewardRegion = Region(-230, 1216, 33, 28).xFromCenter()
     val resultCeRewardDetailsRegion = Region(if (isWide) 193 else 0, 512, 135, 115)
@@ -108,7 +134,10 @@ class Locations @Inject constructor(
     val giftBoxSwipeStart = Location(120, if (canLongSwipe) 1200 else 1050).xFromCenter()
     val giftBoxSwipeEnd = Location(120, if (canLongSwipe) 350 else 575).xFromCenter()
 
-    val ceEnhanceRegion = Region(200, 600, 400, 400)
+    val emptyEnhanceRegion = when (isWide) {
+        true -> Region(-1100, 600, 400, 400).xFromCenter()
+        false -> Region(200, 600, 400, 400)
+    }
     val ceEnhanceClick = Location(200, 600)
     val levelOneCERegion = Region(160, 380, 1840, 900)
 
@@ -117,4 +146,24 @@ class Locations @Inject constructor(
     val rankUpRegion = Region(270, 730, 220, 340).xFromCenter()
 
     val middleOfScreenClick = Location(0, 720).xFromCenter()
+
+    /**
+     * The following region are used for the various enhancement screen listed below:
+     * Skill Upgrade, Ascension, Append Upgrade and Grail
+     */
+    val enhancementBannerRegion = when(isWide) {
+        true -> Region(-412, 282, 241, 37).xFromCenter()
+        false -> Region(-413, 324, 241, 37).xFromCenter()
+    }
+
+    val enhancementClick = when (isWide) {
+        false -> Location(-281, 1343).xFromRight()
+        true -> Location(-396, 1284).xFromRight()
+    }
+
+    val tempServantEnhancementRegion = Region(252, 1096, 301, 57).xFromCenter()
+
+    val enhancementSkipRapidClick = Location(0, 1400).xFromCenter()
+
+    val tempServantEnhancementLocation = Location(402, 1124).xFromCenter()
 }

@@ -10,6 +10,7 @@ import io.github.fate_grand_automata.BuildConfig
 import io.github.fate_grand_automata.IStorageProvider
 import io.github.fate_grand_automata.SupportImageKind
 import io.github.fate_grand_automata.prefs.core.PrefsCore
+import io.github.fate_grand_automata.scripts.enums.GameServer
 import io.github.lib_automata.Pattern
 import timber.log.Timber
 import java.io.File
@@ -45,8 +46,12 @@ class StorageProvider @Inject constructor(
     val rootDirName
         get() = dirRoot?.name
 
-    private val recordingFile
-        get() = dirRoot.getOrCreateFile("record.mp4")
+    private val recordingFile: DocumentFile
+        get() {
+            val sdf = SimpleDateFormat("yyyy-MM-dd-hh-mm-ss", Locale.getDefault())
+            val timeString = sdf.format(Date())
+            return dirRoot.getOrCreateFile("record-$timeString.mp4")
+        }
 
     val recordingFileDescriptor
         get() = resolver.openFileDescriptor(recordingFile.uri, "rw")
@@ -162,7 +167,7 @@ class StorageProvider @Inject constructor(
         get() = dirRoot.getOrCreateDir("drops")
 
     override fun dropScreenshot(patterns: List<Pattern>) {
-        val sdf = SimpleDateFormat("dd-M-yyyy-hh-mm-ss", Locale.US)
+        val sdf = SimpleDateFormat("yyyy-MM-dd-hh-mm-ss", Locale.getDefault())
         val timeString = sdf.format(Date())
 
         for ((i, pattern) in patterns.withIndex()) {
@@ -175,6 +180,25 @@ class StorageProvider @Inject constructor(
                 resolver.openOutputStream(file.uri)?.use { stream ->
                     pattern.save(stream)
                 }
+            }
+        }
+    }
+
+    private val bondFolder
+        get() = dirRoot.getOrCreateDir("bond")
+
+    override fun dropBondScreenShot(pattern: Pattern, server: GameServer) {
+        val sdf = SimpleDateFormat("yyyy-MM-dd-hh-mm-ss", Locale.getDefault())
+        val timeString = sdf.format(Date())
+
+        val dropFileName = "bond-${server.simple.uppercase()}-${timeString}.png"
+
+        pattern.use {
+            val file = bondFolder.createFile(mimePng, dropFileName)
+                ?: throw KnownException(KnownException.Reason.CouldNotCreateDropScreenshotFile)
+
+            resolver.openOutputStream(file.uri)?.use { stream ->
+                pattern.save(stream)
             }
         }
     }

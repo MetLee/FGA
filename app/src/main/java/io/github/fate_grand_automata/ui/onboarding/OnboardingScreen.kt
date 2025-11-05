@@ -19,8 +19,8 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.KeyboardArrowLeft
-import androidx.compose.material.icons.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -58,6 +58,7 @@ fun OnboardingContent(
     val pages = remember {
         listOf(
             WelcomeScreen(vm),
+            PickLanguage(vm),
             PickDirectory(vm),
             DisableBatteryOptimization(vm),
             YoutubeVideo(vm)
@@ -65,7 +66,7 @@ fun OnboardingContent(
     }
 
     val scope = rememberCoroutineScope()
-    val pageState = rememberPagerState(pageCount = {pages.size},)
+    val pageState = rememberPagerState(pageCount = { pages.size })
     var nextEnabled by remember { mutableStateOf(true) }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -117,7 +118,7 @@ fun TopSection(onBackClick: () -> Unit = {}) {
             onClick = onBackClick,
             modifier = Modifier.align(Alignment.CenterStart)
         ) {
-            Icon(imageVector = Icons.Outlined.KeyboardArrowLeft, contentDescription = null)
+            Icon(imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowLeft, contentDescription = null)
         }
     }
 }
@@ -140,7 +141,7 @@ fun BottomSection(size: Int, index: Int, enabled: Boolean, onButtonClick: () -> 
                 .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
         ) {
             Icon(
-                Icons.Outlined.KeyboardArrowRight,
+                Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                 tint = Color.White,
                 contentDescription = "Localized description"
             )

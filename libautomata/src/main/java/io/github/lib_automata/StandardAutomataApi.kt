@@ -29,7 +29,7 @@ class StandardAutomataApi @Inject constructor(
     override fun <T> useColor(block: () -> T): T =
         colorManager.useColor(block)
 
-    override fun Duration.wait() = wait(this)
+    override fun Duration.wait(applyMultiplier: Boolean) = wait(this, applyMultiplier)
 
     override fun Location.click(times: Int) = click(this, times)
 
@@ -52,6 +52,8 @@ class StandardAutomataApi @Inject constructor(
 
     override fun Region.isWhite() = imageMatcher.isWhite(this)
 
+    override fun Region.isBlack() = imageMatcher.isBlack(this)
+
     override fun Region.detectText(outlinedText: Boolean): String {
         screenshotManager.getScreenshot()
             .crop(transform.toImage(this))
@@ -68,5 +70,14 @@ class StandardAutomataApi @Inject constructor(
                 return ocrService.detectText(it)
             }
     }
+
+    override fun Map<Pattern, Region>.exists(
+        timeout: Duration, similarity: Double?, requireAll: Boolean,
+    ) = imageMatcher.exists(
+        items = this,
+        timeout = timeout,
+        similarity = similarity,
+        requireAll = requireAll
+    )
 }
 

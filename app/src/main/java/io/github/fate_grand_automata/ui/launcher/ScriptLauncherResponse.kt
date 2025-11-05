@@ -1,10 +1,7 @@
 package io.github.fate_grand_automata.ui.launcher
 
-import io.github.fate_grand_automata.scripts.enums.RefillResourceEnum
-import io.github.fate_grand_automata.scripts.prefs.IBattleConfig
-
 sealed class ScriptLauncherResponse {
-    object Cancel : ScriptLauncherResponse()
+    data object Cancel : ScriptLauncherResponse()
     data class FP(val limit: Int?) : ScriptLauncherResponse()
     data class Lottery(
         val giftBox: GiftBox?
@@ -16,16 +13,10 @@ sealed class ScriptLauncherResponse {
     ) : ScriptLauncherResponse()
 
     data class CEBomb(val targetRarity: Int) : ScriptLauncherResponse()
-    object SupportImageMaker : ScriptLauncherResponse()
-    data class Battle(
-        val config: IBattleConfig,
-        val refillResources: Set<RefillResourceEnum>,
-        val refillCount: Int,
-        val limitRuns: Int?,
-        val limitMats: Int?,
-        val limitCEs: Int?,
-        val waitApRegen: Boolean
-    ) : ScriptLauncherResponse()
+    data object SupportImageMaker : ScriptLauncherResponse()
+    data object Battle : ScriptLauncherResponse()
+
+    data object ServantEnhancement : ScriptLauncherResponse()
 }
 
 class ScriptLauncherResponseBuilder(

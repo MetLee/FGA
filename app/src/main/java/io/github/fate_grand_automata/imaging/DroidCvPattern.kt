@@ -75,7 +75,7 @@ class DroidCvPattern(
         target.tag = tag
     }
 
-    private fun match(template: Pattern): Mat {
+    private fun match(template: Pattern): Mat? {
         val result = Mat()
         if (template is DroidCvPattern) {
             if (template.width <= width && template.height <= height) {
@@ -85,18 +85,18 @@ class DroidCvPattern(
                     result,
                     Imgproc.TM_CCOEFF_NORMED
                 )
+                return result
             } else {
                 Timber.v("Skipped matching $template: Region out of bounds")
             }
         }
-
-        return result
+        return null  
     }
 
     override fun findMatches(template: Pattern, similarity: Double) = sequence {
         val result = match(template)
 
-        result.use {
+        result?.use {
             while (true) {
                 val minMaxLocResult = Core.minMaxLoc(it)
                 val score = minMaxLocResult.maxVal
@@ -172,6 +172,12 @@ class DroidCvPattern(
         val minMaxLocResult = Core.minMaxLoc(mat)
         // 0 = black, 255 = white
         return minMaxLocResult.minVal >= 200
+    }
+
+    override fun isBlack(): Boolean {
+        val minMaxLocResult = Core.minMaxLoc(mat)
+        // 0 = black, 255 = white
+        return minMaxLocResult.maxVal <= 55
     }
 
     override fun floodFill(x: Double, y: Double, maxDiff: Double, newValue: Double): Pattern {
